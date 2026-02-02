@@ -1,0 +1,2005 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>温馨家庭打卡</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            /* 全新配色方案 - 现代简约风格 */
+            --primary-blue: #4F46E5;
+            --light-blue: #EEF2FF;
+            --dark-blue: #3730A3;
+            --accent-purple: #7C3AED;
+            --soft-gray: #F8FAFC;
+            --pure-white: #FFFFFF;
+            --text-dark: #1E293B;
+            --text-gray: #64748B;
+            --text-light: #94A3B8;
+            --success-green: #10B981;
+            --warning-amber: #F59E0B;
+            --error-red: #EF4444;
+            
+            /* 渐变色 */
+            --gradient-primary: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+            --gradient-soft: linear-gradient(135deg, #EEF2FF 0%, #F8FAFC 100%);
+            --gradient-success: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+            --gradient-warm: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
+            
+            /* 阴影系统 */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --shadow-colored: 0 10px 25px -5px rgba(79, 70, 229, 0.2);
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, #F1F5F9 0%, #FFFFFF 50%, #F8FAFC 100%);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* 添加全局动画 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .app-container {
+            min-height: 100vh;
+            padding-bottom: 80px;
+            position: relative;
+        }
+
+        /* 背景装饰元素 - 更加微妙 */
+        .app-container::before {
+            content: '';
+            position: fixed;
+            top: -20%;
+            right: -20%;
+            width: 40%;
+            height: 40%;
+            background: radial-gradient(circle, rgba(79, 70, 229, 0.03) 0%, transparent 70%);
+            animation: float 8s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        .app-container::after {
+            content: '';
+            position: fixed;
+            bottom: -20%;
+            left: -20%;
+            width: 40%;
+            height: 40%;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.02) 0%, transparent 70%);
+            animation: float 10s ease-in-out infinite reverse;
+            z-index: -1;
+        }
+
+        /* 登录页面样式 */
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            background: var(--gradient-primary);
+        }
+
+        .login-card {
+            background: var(--pure-white);
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: var(--shadow-xl);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .app-logo {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .app-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #E2E8F0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: var(--pure-white);
+            box-sizing: border-box;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: var(--gradient-primary);
+            color: var(--pure-white);
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 12px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-colored);
+        }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 16px;
+            background: var(--pure-white);
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: var(--light-blue);
+        }
+
+        .message {
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .message.error {
+            background: #FED7D7;
+            color: #C53030;
+            border: 1px solid #FEB2B2;
+        }
+
+        .message.success {
+            background: #C6F6D5;
+            color: #2F855A;
+            border: 1px solid #9AE6B4;
+        }
+
+        .form-switch {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--text-gray);
+            font-size: 14px;
+        }
+
+        .form-switch a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .form-switch a:hover {
+            text-decoration: underline;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* 主应用样式 */
+        .main-content {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .page-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* 个人信息卡片 - 全新设计 */
+        .profile-card {
+            background: var(--pure-white);
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(79, 70, 229, 0.08);
+        }
+
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+        }
+
+        .profile-card.clickable {
+            cursor: pointer;
+        }
+
+        .profile-card.clickable:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-colored);
+            border-color: rgba(79, 70, 229, 0.15);
+        }
+
+        .profile-avatar {
+            width: 72px;
+            height: 72px;
+            background: var(--gradient-primary);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-right: 20px;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+        }
+
+        .profile-card:hover .profile-avatar {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-info h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+        }
+
+        .profile-info p {
+            font-size: 15px;
+            color: var(--text-gray);
+        }
+
+        .profile-arrow {
+            font-size: 20px;
+            color: var(--primary-blue);
+            transition: transform 0.3s ease;
+            opacity: 0.7;
+        }
+
+        .profile-card:hover .profile-arrow {
+            transform: translateX(4px);
+            opacity: 1;
+        }
+
+        /* 统计卡片 - 全新设计 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .stat-card {
+            background: var(--pure-white);
+            border-radius: 20px;
+            padding: 24px 20px;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            animation: slideInRight 0.6s ease-out;
+            border: 1px solid rgba(79, 70, 229, 0.05);
+        }
+
+        .stat-card:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .stat-card:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .stat-card.clickable {
+            cursor: pointer;
+        }
+
+        .stat-card.clickable:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+            border-color: rgba(79, 70, 229, 0.1);
+        }
+
+        .stat-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+            display: inline-block;
+            transition: transform 0.3s ease;
+            filter: grayscale(0.2);
+        }
+
+        .stat-card:hover .stat-icon {
+            transform: scale(1.1);
+            filter: grayscale(0);
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary-blue);
+            margin-bottom: 6px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-gray);
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 章节样式 - 增强整体感 */
+        .section {
+            background: var(--pure-white);
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: var(--shadow-lg);
+            animation: fadeInUp 0.8s ease-out;
+            animation-delay: 0.3s;
+            animation-fill-mode: both;
+            border: 1px solid rgba(79, 70, 229, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            opacity: 0.6;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(79, 70, 229, 0.08);
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-dark);
+            position: relative;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .action-btn:hover::before {
+            left: 100%;
+        }
+
+        .action-btn.primary {
+            background: var(--gradient-primary);
+            color: var(--pure-white);
+            box-shadow: var(--shadow-md);
+        }
+
+        .action-btn.primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-colored);
+        }
+
+        .action-btn.secondary {
+            background: rgba(79, 70, 229, 0.08);
+            color: var(--primary-blue);
+            border: 1px solid rgba(79, 70, 229, 0.15);
+        }
+
+        .action-btn.secondary:hover {
+            background: rgba(79, 70, 229, 0.12);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-icon {
+            font-size: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .action-btn:hover .btn-icon {
+            transform: scale(1.1);
+        }
+
+        /* 任务容器 - 简化设计 */
+        .tasks-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .task-card {
+            background: var(--soft-gray);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            border-left: 4px solid var(--primary-blue);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            animation: slideInRight 0.6s ease-out;
+        }
+
+        .task-card:nth-child(even) {
+            animation-delay: 0.1s;
+        }
+
+        .task-card:hover {
+            transform: translateY(-2px);
+            background: var(--pure-white);
+            box-shadow: var(--shadow-md);
+        }
+
+        .task-card.completed {
+            border-left-color: var(--success-green);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .task-content {
+            flex: 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .task-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        .task-time {
+            font-size: 12px;
+            color: var(--text-gray);
+            background: var(--pure-white);
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .task-description {
+            font-size: 14px;
+            color: var(--text-gray);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .task-action {
+            margin-left: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .checkin-btn {
+            background: var(--gradient-success);
+            color: var(--pure-white);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .checkin-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .checkin-btn:hover::before {
+            left: 100%;
+        }
+
+        .checkin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .completed-badge {
+            font-size: 24px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* 空状态 - 简化设计 */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-light);
+            font-size: 16px;
+            background: var(--soft-gray);
+            border-radius: 16px;
+            position: relative;
+        }
+
+        .empty-state::before {
+            content: '🌟';
+            font-size: 48px;
+            display: block;
+            margin-bottom: 16px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* 悬浮菜单 - 现代设计 */
+        .floating-menu {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .floating-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .floating-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .floating-btn:hover::before {
+            opacity: 1;
+        }
+
+        .main-btn {
+            background: var(--gradient-primary);
+            box-shadow: var(--shadow-colored);
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .main-btn:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .option-btn {
+            background: var(--pure-white);
+            box-shadow: var(--shadow-md);
+            transform: scale(0.85);
+            opacity: 0.9;
+            border: 1px solid rgba(79, 70, 229, 0.1);
+        }
+
+        .option-btn:hover {
+            transform: scale(0.95);
+            box-shadow: var(--shadow-lg);
+            opacity: 1;
+        }
+
+        .floating-icon {
+            font-size: 22px;
+            color: var(--pure-white);
+            transition: all 0.3s ease;
+        }
+
+        .option-btn .floating-icon {
+            color: var(--primary-blue);
+        }
+
+        .floating-options {
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+        }
+
+        .floating-options.hidden .option-btn {
+            transform: scale(0) translateY(20px);
+            opacity: 0;
+        }
+
+        .floating-options .option-btn:nth-child(1) {
+            transition-delay: 0.1s;
+        }
+
+        .floating-options .option-btn:nth-child(2) {
+            transition-delay: 0.2s;
+        }
+
+        /* 响应式设计 - 增强 */
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 16px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .stat-card {
+                display: flex;
+                align-items: center;
+                text-align: left;
+                padding: 16px;
+            }
+            
+            .stat-icon {
+                margin-right: 16px;
+                margin-bottom: 0;
+                font-size: 28px;
+            }
+
+            .floating-menu {
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .floating-btn {
+                width: 56px;
+                height: 56px;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 16px;
+            }
+
+            .header-actions {
+                justify-content: center;
+            }
+
+            .action-btn {
+                flex: 1;
+                justify-content: center;
+            }
+
+            .profile-card {
+                padding: 20px;
+            }
+
+            .profile-avatar {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+            }
+
+            .task-card {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 16px;
+            }
+
+            .task-action {
+                margin-left: 0;
+                align-self: flex-end;
+            }
+        }
+
+        /* 深色模式支持 */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --text-dark: #F7FAFC;
+                --text-gray: #A0AEC0;
+                --pure-white: #2D3748;
+                --warm-white: #4A5568;
+            }
+
+            .app-container::before,
+            .app-container::after {
+                opacity: 0.5;
+            }
+        }
+
+        /* 减少动画的用户偏好 */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* 高对比度模式 */
+        @media (prefers-contrast: high) {
+            .task-card,
+            .stat-card,
+            .profile-card {
+                border: 2px solid var(--text-dark);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 登录页面 -->
+    <div id="loginContainer" class="login-container">
+        <div class="login-card">
+            <div class="app-logo">🏠</div>
+            <h1 class="app-title">温馨家庭打卡</h1>
+            
+            <!-- 登录表单 -->
+            <div id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">邮箱地址</label>
+                    <input type="email" id="loginEmail" class="form-input" placeholder="请输入邮箱地址" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">密码</label>
+                    <input type="password" id="loginPassword" class="form-input" placeholder="请输入密码" required>
+                </div>
+                <button id="loginBtn" class="btn-primary">登录</button>
+                <button id="showRegisterBtn" class="btn-secondary">注册新账户</button>
+                <div id="loginMessage" class="message hidden"></div>
+                <div class="form-switch">
+                    <span>第一次使用？</span>
+                    <a href="#" onclick="showRegisterForm()">立即注册</a>
+                </div>
+            </div>
+
+            <!-- 注册表单 -->
+            <div id="registerForm" class="hidden">
+                <div class="form-group">
+                    <label for="regName">姓名</label>
+                    <input type="text" id="regName" class="form-input" placeholder="请输入您的姓名" required>
+                </div>
+                <div class="form-group">
+                    <label for="regEmail">邮箱地址</label>
+                    <input type="email" id="regEmail" class="form-input" placeholder="请输入邮箱地址" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">密码</label>
+                    <input type="password" id="regPassword" class="form-input" placeholder="请输入密码（至少6位）" required>
+                </div>
+                <button id="registerBtn" class="btn-primary">注册</button>
+                <button id="backToLoginBtn" class="btn-secondary">返回登录</button>
+                <div id="regMessage" class="message hidden"></div>
+                <div class="form-switch">
+                    <span>已有账户？</span>
+                    <a href="#" onclick="showLoginForm()">立即登录</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主应用 - 单页面设计 -->
+    <div id="mainApp" class="app-container hidden">
+        <!-- 主页面内容 -->
+        <div class="main-content">
+            <div class="page-container">
+                <!-- 个人信息卡片 - 可点击 -->
+                <div class="profile-card clickable" onclick="showProfileDetail()">
+                    <div class="profile-avatar" id="userAvatar">👤</div>
+                    <div class="profile-info">
+                        <h2 id="userName">用户姓名</h2>
+                        <p id="userEmail">user@example.com</p>
+                    </div>
+                    <div class="profile-arrow">›</div>
+                </div>
+
+                <!-- 统计卡片 - 可点击 -->
+                <div class="stats-grid">
+                    <div class="stat-card clickable" onclick="showCalendar()">
+                        <div class="stat-icon">📅</div>
+                        <div class="stat-info">
+                            <div class="stat-number" id="monthlyCheckins">0</div>
+                            <div class="stat-label">本月打卡</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🔥</div>
+                        <div class="stat-info">
+                            <div class="stat-number" id="streakDays">0</div>
+                            <div class="stat-label">连续天数</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-info">
+                            <div class="stat-number" id="completionRate">0%</div>
+                            <div class="stat-label">完成率</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 今日任务区域 -->
+                <div class="section">
+                    <div class="section-header">
+                        <h3 class="section-title">今日任务</h3>
+                        <div class="header-actions">
+                            <button class="action-btn secondary" onclick="showAllTasks()">
+                                <span class="btn-icon">📋</span>
+                                <span>查看全部</span>
+                            </button>
+                            <button class="action-btn primary" onclick="showQuickAdd()">
+                                <span class="btn-icon">➕</span>
+                                <span>添加任务</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="todayTasksContainer" class="tasks-container">
+                        <!-- 动态生成今日任务 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 悬浮操作按钮 -->
+    <div id="floatingMenu" class="floating-menu">
+        <div class="floating-btn main-btn" onclick="toggleFloatingMenu()">
+            <span class="floating-icon">⚙️</span>
+        </div>
+        <div class="floating-options hidden">
+            <div class="floating-btn option-btn" onclick="showSettings()" title="设置">
+                <span class="floating-icon">⚙️</span>
+            </div>
+            <div class="floating-btn option-btn" onclick="handleLogout()" title="退出">
+                <span class="floating-icon">🚪</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        console.log('🏠 温馨家庭打卡系统 - 最终版本');
+        
+        // 全局状态
+        let currentUser = null;
+        let floatingMenuOpen = false;
+        let currentModal = null;
+
+        // 模拟数据
+        const appData = {
+            users: JSON.parse(localStorage.getItem('familyCheckin_users') || '[]'),
+            tasks: JSON.parse(localStorage.getItem('familyCheckin_tasks') || '[]'),
+            checkins: JSON.parse(localStorage.getItem('familyCheckin_checkins') || '[]'),
+            relationships: JSON.parse(localStorage.getItem('familyCheckin_relationships') || '[]')
+        };
+
+        // 保存数据到本地存储
+        function saveData() {
+            localStorage.setItem('familyCheckin_users', JSON.stringify(appData.users));
+            localStorage.setItem('familyCheckin_tasks', JSON.stringify(appData.tasks));
+            localStorage.setItem('familyCheckin_checkins', JSON.stringify(appData.checkins));
+            localStorage.setItem('familyCheckin_relationships', JSON.stringify(appData.relationships));
+        }
+
+        // 应用初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('应用启动...');
+            
+            // 检查是否有保存的登录状态
+            const savedUser = localStorage.getItem('familyCheckin_currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showMainApp();
+            } else {
+                showLoginScreen();
+            }
+
+            // 绑定事件
+            bindEvents();
+        });
+
+        // 绑定事件监听器
+        function bindEvents() {
+            // 登录相关
+            document.getElementById('loginBtn').addEventListener('click', handleLogin);
+            document.getElementById('showRegisterBtn').addEventListener('click', showRegisterForm);
+            document.getElementById('registerBtn').addEventListener('click', handleRegister);
+            document.getElementById('backToLoginBtn').addEventListener('click', showLoginForm);
+
+            // 回车键登录
+            document.getElementById('loginPassword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') handleLogin();
+            });
+
+            // 回车键注册
+            document.getElementById('regPassword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') handleRegister();
+            });
+        }
+
+        // 显示登录界面
+        function showLoginScreen() {
+            document.getElementById('loginContainer').classList.remove('hidden');
+            document.getElementById('mainApp').classList.add('hidden');
+        }
+
+        // 显示主应用
+        function showMainApp() {
+            document.getElementById('loginContainer').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            
+            updateUserProfile();
+            loadDashboardData();
+        }
+
+        // 表单切换
+        function showRegisterForm() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
+            clearMessages();
+        }
+
+        function showLoginForm() {
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('loginForm').classList.remove('hidden');
+            clearMessages();
+        }
+
+        // 清除消息
+        function clearMessages() {
+            document.getElementById('loginMessage').classList.add('hidden');
+            document.getElementById('regMessage').classList.add('hidden');
+        }
+
+        // 显示消息
+        function showMessage(elementId, message, type = 'error') {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `message ${type}`;
+            element.classList.remove('hidden');
+        }
+
+        // 处理登录
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            if (!email || !password) {
+                showMessage('loginMessage', '请输入邮箱和密码');
+                return;
+            }
+
+            // 查找用户
+            const user = appData.users.find(u => u.email === email && u.password === password);
+            if (!user) {
+                showMessage('loginMessage', '邮箱或密码错误');
+                return;
+            }
+
+            // 登录成功
+            currentUser = user;
+            localStorage.setItem('familyCheckin_currentUser', JSON.stringify(user));
+            showMessage('loginMessage', '登录成功！', 'success');
+            
+            setTimeout(() => {
+                showMainApp();
+            }, 1000);
+        }
+
+        // 处理注册
+        function handleRegister() {
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value;
+
+            if (!name || !email || !password) {
+                showMessage('regMessage', '请填写所有字段');
+                return;
+            }
+
+            if (password.length < 6) {
+                showMessage('regMessage', '密码至少需要6位');
+                return;
+            }
+
+            // 检查邮箱是否已存在
+            if (appData.users.find(u => u.email === email)) {
+                showMessage('regMessage', '邮箱已被使用');
+                return;
+            }
+
+            // 创建新用户
+            const newUser = {
+                id: Date.now().toString(),
+                name: name,
+                email: email,
+                password: password,
+                avatar: '👤',
+                createdAt: Date.now()
+            };
+
+            appData.users.push(newUser);
+            saveData();
+
+            showMessage('regMessage', '注册成功！正在登录...', 'success');
+            
+            // 自动登录
+            setTimeout(() => {
+                currentUser = newUser;
+                localStorage.setItem('familyCheckin_currentUser', JSON.stringify(newUser));
+                showMainApp();
+            }, 1000);
+        }
+
+        function updateUserProfile() {
+            if (currentUser) {
+                document.getElementById('userName').textContent = currentUser.name;
+                document.getElementById('userEmail').textContent = currentUser.email;
+                document.getElementById('userAvatar').textContent = currentUser.avatar;
+            }
+        }
+
+        function loadDashboardData() {
+            // 计算统计数据
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+            
+            // 本月打卡次数
+            const monthlyCheckins = appData.checkins.filter(checkin => {
+                const checkinDate = new Date(checkin.date);
+                return checkin.userId === currentUser.id && 
+                       checkinDate.getMonth() === currentMonth && 
+                       checkinDate.getFullYear() === currentYear;
+            }).length;
+
+            // 连续打卡天数（简化计算）
+            const streakDays = calculateStreakDays();
+
+            // 完成率（本月）
+            const monthlyTasks = getMonthlyTasks();
+            const completionRate = monthlyTasks.length > 0 ? 
+                Math.round((monthlyCheckins / monthlyTasks.length) * 100) : 0;
+
+            // 更新统计显示
+            document.getElementById('monthlyCheckins').textContent = monthlyCheckins;
+            document.getElementById('streakDays').textContent = streakDays;
+            document.getElementById('completionRate').textContent = completionRate + '%';
+            
+            // 加载今日任务
+            loadTodayTasks();
+        }
+
+        // 计算连续打卡天数
+        function calculateStreakDays() {
+            const userCheckins = appData.checkins
+                .filter(c => c.userId === currentUser.id)
+                .sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            if (userCheckins.length === 0) return 0;
+            
+            let streak = 0;
+            const today = new Date();
+            let checkDate = new Date(today);
+            
+            for (let i = 0; i < 30; i++) { // 检查最近30天
+                const dateStr = checkDate.toISOString().split('T')[0];
+                const hasCheckin = userCheckins.some(c => c.date === dateStr);
+                
+                if (hasCheckin) {
+                    streak++;
+                } else if (streak > 0) {
+                    break; // 连续记录中断
+                }
+                
+                checkDate.setDate(checkDate.getDate() - 1);
+            }
+            
+            return streak;
+        }
+
+        // 获取本月任务
+        function getMonthlyTasks() {
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+            
+            return appData.tasks.filter(task => {
+                const taskDate = new Date(task.startDate);
+                return task.assignedTo === currentUser.id &&
+                       taskDate.getMonth() === currentMonth &&
+                       taskDate.getFullYear() === currentYear;
+            });
+        }
+
+        function loadTodayTasks() {
+            const today = new Date().toISOString().split('T')[0];
+            const todayTasks = appData.tasks.filter(task => 
+                task.assignedTo === currentUser.id && 
+                isTaskActiveOnDate(task, today)
+            );
+            
+            const container = document.getElementById('todayTasksContainer');
+            
+            if (todayTasks.length === 0) {
+                container.innerHTML = '<div class="empty-state">今日无任务 🎉</div>';
+                return;
+            }
+
+            container.innerHTML = todayTasks.map(task => {
+                const hasCheckedIn = appData.checkins.some(c => 
+                    c.taskId === task.id && 
+                    c.userId === currentUser.id && 
+                    c.date === today
+                );
+
+                return `
+                    <div class="task-card ${hasCheckedIn ? 'completed' : ''}">
+                        <div class="task-content">
+                            <div class="task-header">
+                                <h4 class="task-title">${task.title}</h4>
+                                <span class="task-time">${task.targetTime}</span>
+                            </div>
+                            <p class="task-description">${task.description}</p>
+                        </div>
+                        <div class="task-action">
+                            ${hasCheckedIn ? 
+                                '<div class="completed-badge">✅</div>' :
+                                '<button class="checkin-btn" onclick="checkinTask(\'' + task.id + '\')">打卡</button>'
+                            }
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 判断任务在指定日期是否有效
+        function isTaskActiveOnDate(task, dateStr) {
+            const date = new Date(dateStr);
+            const startDate = new Date(task.startDate);
+            const endDate = new Date(task.endDate);
+            
+            return date >= startDate && date <= endDate;
+        }
+
+        // 点击头像显示个人详情
+        function showProfileDetail() {
+            showModal('个人详情', createProfileDetailContent());
+        }
+
+        // 创建个人详情内容
+        function createProfileDetailContent() {
+            const userCheckins = appData.checkins.filter(c => c.userId === currentUser.id);
+            const recentCheckins = userCheckins
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 10);
+
+            const collaborators = getCollaborators();
+            const managers = getManagersOfCurrentUser();
+
+            return `
+                <div style="max-height: 70vh; overflow-y: auto;">
+                    <!-- 个人信息 -->
+                    <div style="text-align: center; margin-bottom: 24px; padding: 20px; background: var(--soft-gray); border-radius: 16px;">
+                        <div style="font-size: 48px; margin-bottom: 12px;">${currentUser.avatar}</div>
+                        <h3 style="margin-bottom: 8px; color: var(--text-dark);">${currentUser.name}</h3>
+                        <p style="color: var(--text-gray);">${currentUser.email}</p>
+                    </div>
+
+                    <!-- 统计信息 -->
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 24px;">
+                        <div style="text-align: center; padding: 16px; background: var(--pure-white); border-radius: 12px; box-shadow: var(--shadow-sm);">
+                            <div style="font-size: 24px; font-weight: 700; color: var(--primary-blue);">${userCheckins.length}</div>
+                            <div style="font-size: 12px; color: var(--text-gray);">总打卡次数</div>
+                        </div>
+                        <div style="text-align: center; padding: 16px; background: var(--pure-white); border-radius: 12px; box-shadow: var(--shadow-sm);">
+                            <div style="font-size: 24px; font-weight: 700; color: var(--accent-purple);">${appData.tasks.filter(t => t.assignedTo === currentUser.id).length}</div>
+                            <div style="font-size: 12px; color: var(--text-gray);">分配任务数</div>
+                        </div>
+                    </div>
+
+                    <!-- 最近打卡记录 -->
+                    <div style="margin-bottom: 24px;">
+                        <h4 style="margin-bottom: 12px; color: var(--text-dark);">最近打卡记录</h4>
+                        ${recentCheckins.length === 0 ? 
+                            '<p style="text-align: center; color: var(--text-gray); padding: 20px;">暂无打卡记录</p>' :
+                            recentCheckins.map(checkin => {
+                                const task = appData.tasks.find(t => t.id === checkin.taskId);
+                                return `
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--pure-white); border-radius: 8px; margin-bottom: 8px; box-shadow: var(--shadow-sm);">
+                                        <div>
+                                            <div style="font-weight: 600; color: var(--text-dark);">${task ? task.title : '未知任务'}</div>
+                                            <div style="font-size: 12px; color: var(--text-gray);">${checkin.date}</div>
+                                        </div>
+                                        <div style="font-size: 14px; color: var(--primary-blue); font-weight: 500;">${checkin.time}</div>
+                                    </div>
+                                `;
+                            }).join('')
+                        }
+                    </div>
+
+                    <!-- 用户关系管理 -->
+                    <div>
+                        <h4 style="margin-bottom: 12px; color: var(--text-dark);">用户关系管理</h4>
+                        
+                        <!-- 添加协作用户 -->
+                        <div style="margin-bottom: 16px; padding: 16px; background: var(--soft-gray); border-radius: 12px;">
+                            <h5 style="margin-bottom: 12px; color: var(--text-dark);">添加协作用户</h5>
+                            <div style="display: flex; gap: 8px;">
+                                <input type="email" id="addUserEmail" placeholder="输入用户邮箱" style="flex: 1; padding: 8px 12px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 14px;">
+                                <button onclick="addCollaboratorFromModal()" style="padding: 8px 16px; background: var(--gradient-primary); color: white; border: none; border-radius: 8px; font-size: 14px; cursor: pointer;">添加</button>
+                            </div>
+                        </div>
+
+                        <!-- 我的协作用户 -->
+                        <div style="margin-bottom: 16px;">
+                            <h5 style="margin-bottom: 8px; color: var(--text-dark);">我的协作用户 (${collaborators.length})</h5>
+                            ${collaborators.length === 0 ? 
+                                '<p style="color: var(--text-gray); font-size: 14px;">暂无协作用户</p>' :
+                                collaborators.map(user => `
+                                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: var(--pure-white); border-radius: 8px; margin-bottom: 4px; box-shadow: var(--shadow-sm);">
+                                        <div style="display: flex; align-items: center;">
+                                            <span style="margin-right: 8px;">${user.avatar}</span>
+                                            <div>
+                                                <div style="font-size: 14px; font-weight: 500; color: var(--text-dark);">${user.name}</div>
+                                                <div style="font-size: 12px; color: var(--text-gray);">${user.email}</div>
+                                            </div>
+                                        </div>
+                                        <button onclick="removeCollaborator('${user.id}')" style="padding: 4px 8px; background: var(--error-red); color: white; border: none; border-radius: 4px; font-size: 12px; cursor: pointer;">移除</button>
+                                    </div>
+                                `).join('')
+                            }
+                        </div>
+
+                        <!-- 管理我的用户 -->
+                        <div>
+                            <h5 style="margin-bottom: 8px; color: var(--text-dark);">管理我的用户 (${managers.length})</h5>
+                            ${managers.length === 0 ? 
+                                '<p style="color: var(--text-gray); font-size: 14px;">无人管理您</p>' :
+                                managers.map(manager => `
+                                    <div style="display: flex; align-items: center; padding: 8px 12px; background: var(--pure-white); border-radius: 8px; margin-bottom: 4px; box-shadow: var(--shadow-sm);">
+                                        <span style="margin-right: 8px;">${manager.avatar}</span>
+                                        <div>
+                                            <div style="font-size: 14px; font-weight: 500; color: var(--text-dark);">${manager.name}</div>
+                                            <div style="font-size: 12px; color: var(--text-gray);">${manager.email}</div>
+                                        </div>
+                                    </div>
+                                `).join('')
+                            }
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 获取协作用户列表
+        function getCollaborators() {
+            const myRelationships = appData.relationships.filter(r => r.managerId === currentUser.id);
+            return myRelationships.map(r => 
+                appData.users.find(u => u.id === r.userId)
+            ).filter(Boolean);
+        }
+
+        // 获取管理当前用户的人员列表
+        function getManagersOfCurrentUser() {
+            const managerRelationships = appData.relationships.filter(r => r.userId === currentUser.id);
+            return managerRelationships.map(r => 
+                appData.users.find(u => u.id === r.managerId)
+            ).filter(Boolean);
+        }
+
+        // 从模态框添加协作用户
+        function addCollaboratorFromModal() {
+            const email = document.getElementById('addUserEmail').value.trim();
+            
+            if (!email) {
+                alert('请输入用户邮箱');
+                return;
+            }
+
+            const user = appData.users.find(u => u.email === email);
+            if (!user) {
+                alert('用户不存在，请确认邮箱地址是否正确');
+                return;
+            }
+
+            if (user.id === currentUser.id) {
+                alert('不能添加自己为协作用户');
+                return;
+            }
+
+            // 检查是否已经添加过
+            const existingRelation = appData.relationships.find(r => 
+                r.managerId === currentUser.id && r.userId === user.id
+            );
+
+            if (existingRelation) {
+                alert('该用户已经在您的协作列表中');
+                return;
+            }
+
+            // 添加关系
+            const relationship = {
+                id: Date.now().toString(),
+                managerId: currentUser.id,
+                userId: user.id,
+                createdAt: Date.now()
+            };
+
+            appData.relationships.push(relationship);
+            saveData();
+
+            document.getElementById('addUserEmail').value = '';
+            alert('用户添加成功！');
+            
+            // 刷新模态框内容
+            showProfileDetail();
+        }
+
+        // 移除协作用户
+        function removeCollaborator(userId) {
+            if (!confirm('确定要移除这个协作用户吗？移除后将无法为其分配任务。')) {
+                return;
+            }
+            
+            const relationIndex = appData.relationships.findIndex(r => 
+                r.managerId === currentUser.id && r.userId === userId
+            );
+            
+            if (relationIndex > -1) {
+                appData.relationships.splice(relationIndex, 1);
+                saveData();
+                alert('用户移除成功！');
+                
+                // 刷新模态框内容
+                showProfileDetail();
+            }
+        }
+
+        // 点击统计卡片显示日历
+        function showCalendar() {
+            showModal('打卡日历', createCalendarContent());
+        }
+
+        // 创建日历内容
+        function createCalendarContent() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+            
+            // 获取当月的打卡记录
+            const monthlyCheckins = appData.checkins.filter(checkin => {
+                const checkinDate = new Date(checkin.date);
+                return checkin.userId === currentUser.id && 
+                       checkinDate.getMonth() === month && 
+                       checkinDate.getFullYear() === year;
+            });
+
+            // 创建日历
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const startDate = new Date(firstDay);
+            startDate.setDate(startDate.getDate() - firstDay.getDay());
+
+            const monthNames = ['一月', '二月', '三月', '四月', '五月', '六月', 
+                              '七月', '八月', '九月', '十月', '十一月', '十二月'];
+
+            let calendarHTML = `
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h3 style="color: var(--text-dark);">${year}年 ${monthNames[month]}</h3>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 20px;">
+                    <div style="text-align: center; padding: 8px; font-weight: 600; color: var(--text-gray);">日</div>
+                    <div style="text-align: center; padding: 8px; font-weight: 600; color: var(--text-gray);">一</div>
+                    <div style="text-align: center; padding: 8px; font-weight: 600; color: var(--text-gray);">二</div>
+                    <div style="text-align: center; padding: 8px; font-weight: 600; color: var(--text-gray);">三</div>
+                    <div style="text-align: center; padding: 8px; font-weight: 600; color: var(--text-gray);">四</div>
+                    <div style="text-align: center; padding: 8px; font-weight: 600; color: var(--text-gray);">五</div>
+                    <div style="text-align: center; padding: 8px; font-weight: 600; color: var(--text-gray);">六</div>
+            `;
+
+            const currentDate = new Date(startDate);
+            for (let i = 0; i < 42; i++) {
+                const dateStr = currentDate.toISOString().split('T')[0];
+                const isCurrentMonth = currentDate.getMonth() === month;
+                const isToday = dateStr === now.toISOString().split('T')[0];
+                const hasCheckin = monthlyCheckins.some(c => c.date === dateStr);
+
+                let cellStyle = 'text-align: center; padding: 8px; border-radius: 8px; position: relative;';
+                let cellContent = currentDate.getDate();
+
+                if (!isCurrentMonth) {
+                    cellStyle += ' color: var(--text-light);';
+                } else if (isToday) {
+                    cellStyle += ' background: var(--primary-blue); color: white; font-weight: 600;';
+                } else if (hasCheckin) {
+                    cellStyle += ' background: var(--success-green); color: white;';
+                    cellContent += ' ✓';
+                }
+
+                calendarHTML += `<div style="${cellStyle}">${cellContent}</div>`;
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+
+            calendarHTML += `
+                </div>
+                <div style="display: flex; justify-content: center; gap: 16px; font-size: 14px;">
+                    <div style="display: flex; align-items: center; gap: 4px;">
+                        <div style="width: 12px; height: 12px; background: var(--success-green); border-radius: 50%;"></div>
+                        <span>已打卡</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 4px;">
+                        <div style="width: 12px; height: 12px; background: var(--primary-blue); border-radius: 50%;"></div>
+                        <span>今天</span>
+                    </div>
+                </div>
+            `;
+
+            return calendarHTML;
+        }
+
+        // 查看全部任务
+        function showAllTasks() {
+            showModal('全部任务', createAllTasksContent());
+        }
+
+        // 创建全部任务内容
+        function createAllTasksContent() {
+            const myTasks = appData.tasks.filter(task => task.assignedTo === currentUser.id);
+            const today = new Date().toISOString().split('T')[0];
+
+            if (myTasks.length === 0) {
+                return `
+                    <div style="text-align: center; padding: 40px; color: var(--text-gray);">
+                        <div style="font-size: 48px; margin-bottom: 16px;">📝</div>
+                        <p>暂无任务</p>
+                        <p style="font-size: 14px; margin-top: 8px;">请联系管理员为您分配任务</p>
+                    </div>
+                `;
+            }
+
+            return `
+                <div style="max-height: 60vh; overflow-y: auto;">
+                    ${myTasks.map(task => {
+                        const isToday = isTaskActiveOnDate(task, today);
+                        const hasCheckedIn = appData.checkins.some(c => 
+                            c.taskId === task.id && 
+                            c.userId === currentUser.id && 
+                            c.date === today
+                        );
+
+                        const creator = appData.users.find(u => u.id === task.createdBy);
+                        const creatorName = creator ? creator.name : '未知';
+
+                        return `
+                            <div style="background: var(--pure-white); border-radius: 12px; padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow-sm); ${isToday ? 'border-left: 4px solid var(--success-green);' : 'border-left: 4px solid var(--primary-blue);'}">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                                    <div style="flex: 1;">
+                                        <h4 style="margin-bottom: 4px; color: var(--text-dark);">${task.title}</h4>
+                                        <p style="color: var(--text-gray); font-size: 14px; margin-bottom: 8px;">${task.description}</p>
+                                        <div style="font-size: 12px; color: var(--text-gray);">
+                                            创建者: ${creatorName} | ${task.startDate} - ${task.endDate}
+                                        </div>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <div style="background: var(--light-blue); color: var(--primary-blue); padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 500; margin-bottom: 8px;">
+                                            ${task.targetTime}
+                                        </div>
+                                        ${isToday ? (hasCheckedIn ? 
+                                            '<div style="color: var(--success-green); font-size: 12px;">✅ 已完成</div>' :
+                                            `<button onclick="checkinTaskFromModal('${task.id}')" style="padding: 6px 12px; background: var(--gradient-success); color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer;">立即打卡</button>`
+                                        ) : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        // 从模态框打卡
+        function checkinTaskFromModal(taskId) {
+            checkinTask(taskId);
+            showAllTasks(); // 刷新任务列表
+        }
+
+        // 快速添加任务
+        function showQuickAdd() {
+            showModal('快速添加任务', createQuickAddContent());
+        }
+
+        // 创建快速添加任务内容
+        function createQuickAddContent() {
+            const collaborators = getCollaborators();
+            
+            return `
+                <div>
+                    <div style="margin-bottom: 16px;">
+                        <label style="display: block; margin-bottom: 8px; color: var(--text-dark); font-weight: 500;">任务标题</label>
+                        <input type="text" id="quickTaskTitle" placeholder="例如：晨练、阅读、家务等" style="width: 100%; padding: 12px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 14px;">
+                    </div>
+                    
+                    <div style="margin-bottom: 16px;">
+                        <label style="display: block; margin-bottom: 8px; color: var(--text-dark); font-weight: 500;">任务描述</label>
+                        <textarea id="quickTaskDescription" placeholder="详细描述任务内容..." rows="3" style="width: 100%; padding: 12px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 14px; resize: vertical;"></textarea>
+                    </div>
+
+                    <div style="margin-bottom: 16px;">
+                        <label style="display: block; margin-bottom: 8px; color: var(--text-dark); font-weight: 500;">分配给</label>
+                        <select id="quickAssignTo" style="width: 100%; padding: 12px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 14px;">
+                            <option value="${currentUser.id}">自己 (${currentUser.name})</option>
+                            ${collaborators.map(user => 
+                                `<option value="${user.id}">${user.name} (${user.email})</option>`
+                            ).join('')}
+                        </select>
+                        ${collaborators.length === 0 ? 
+                            '<p style="font-size: 12px; color: var(--text-gray); margin-top: 4px;">暂无协作用户，请先在个人详情中添加</p>' : ''
+                        }
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+                        <div>
+                            <label style="display: block; margin-bottom: 8px; color: var(--text-dark); font-weight: 500;">开始日期</label>
+                            <input type="date" id="quickStartDate" style="width: 100%; padding: 12px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 14px;">
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: 8px; color: var(--text-dark); font-weight: 500;">结束日期</label>
+                            <input type="date" id="quickEndDate" style="width: 100%; padding: 12px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 14px;">
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; color: var(--text-dark); font-weight: 500;">目标时间</label>
+                        <input type="time" id="quickTargetTime" style="width: 100%; padding: 12px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 14px;">
+                    </div>
+
+                    <button onclick="createQuickTask()" style="width: 100%; padding: 14px; background: var(--gradient-primary); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer;">创建任务</button>
+                </div>
+            `;
+        }
+
+        // 创建快速任务
+        function createQuickTask() {
+            const title = document.getElementById('quickTaskTitle').value.trim();
+            const description = document.getElementById('quickTaskDescription').value.trim();
+            const assignedTo = document.getElementById('quickAssignTo').value;
+            const startDate = document.getElementById('quickStartDate').value;
+            const endDate = document.getElementById('quickEndDate').value;
+            const targetTime = document.getElementById('quickTargetTime').value;
+
+            if (!title) {
+                alert('请输入任务标题');
+                return;
+            }
+
+            if (!startDate || !endDate || !targetTime) {
+                alert('请填写完整的时间信息');
+                return;
+            }
+
+            if (new Date(startDate) > new Date(endDate)) {
+                alert('开始日期不能晚于结束日期');
+                return;
+            }
+
+            const newTask = {
+                id: Date.now().toString(),
+                title: title,
+                description: description || '无描述',
+                createdBy: currentUser.id,
+                assignedTo: assignedTo,
+                startDate: startDate,
+                endDate: endDate,
+                targetTime: targetTime,
+                repeat: 'daily',
+                isActive: true,
+                createdAt: Date.now()
+            };
+
+            appData.tasks.push(newTask);
+            saveData();
+
+            alert('任务创建成功！');
+            closeModal();
+            loadDashboardData(); // 刷新首页数据
+        }
+
+        // 通用模态框函数
+        function showModal(title, content) {
+            // 移除现有模态框
+            if (currentModal) {
+                document.body.removeChild(currentModal);
+            }
+
+            // 创建模态框
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 2000;
+                padding: 20px;
+                backdrop-filter: blur(4px);
+            `;
+
+            modal.innerHTML = `
+                <div style="background: var(--pure-white); border-radius: 20px; max-width: 500px; width: 100%; max-height: 90vh; overflow: hidden; box-shadow: var(--shadow-xl); animation: fadeInUp 0.3s ease-out;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; border-bottom: 1px solid rgba(79, 70, 229, 0.1);">
+                        <h3 style="color: var(--text-dark); font-size: 18px; font-weight: 700;">${title}</h3>
+                        <button onclick="closeModal()" style="background: none; border: none; font-size: 24px; color: var(--text-gray); cursor: pointer; padding: 4px; border-radius: 50%; transition: all 0.3s ease;">×</button>
+                    </div>
+                    <div style="padding: 24px;">
+                        ${content}
+                    </div>
+                </div>
+            `;
+
+            // 点击背景关闭
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            document.body.appendChild(modal);
+            currentModal = modal;
+
+            // 设置默认日期（如果是快速添加任务）
+            if (title === '快速添加任务') {
+                const today = new Date();
+                const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+                
+                setTimeout(() => {
+                    const startDateInput = document.getElementById('quickStartDate');
+                    const endDateInput = document.getElementById('quickEndDate');
+                    if (startDateInput) startDateInput.value = today.toISOString().split('T')[0];
+                    if (endDateInput) endDateInput.value = nextWeek.toISOString().split('T')[0];
+                }, 100);
+            }
+        }
+
+        // 关闭模态框
+        function closeModal() {
+            if (currentModal) {
+                document.body.removeChild(currentModal);
+                currentModal = null;
+            }
+        }
+
+        // 悬浮菜单控制
+        function toggleFloatingMenu() {
+            const options = document.querySelector('.floating-options');
+            const mainBtn = document.querySelector('.main-btn .floating-icon');
+            
+            floatingMenuOpen = !floatingMenuOpen;
+            
+            if (floatingMenuOpen) {
+                options.classList.remove('hidden');
+                mainBtn.textContent = '✕';
+            } else {
+                options.classList.add('hidden');
+                mainBtn.textContent = '⚙️';
+            }
+        }
+
+        // 设置页面
+        function showSettings() {
+            showModal('设置', createSettingsContent());
+            toggleFloatingMenu();
+        }
+
+        // 创建设置内容
+        function createSettingsContent() {
+            return `
+                <div>
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="margin-bottom: 12px; color: var(--text-dark);">个人设置</h4>
+                        <div style="padding: 16px; background: var(--soft-gray); border-radius: 12px;">
+                            <div style="margin-bottom: 12px;">
+                                <label style="display: block; margin-bottom: 8px; color: var(--text-dark); font-weight: 500;">修改头像</label>
+                                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                    ${['👤', '👨', '👩', '🧑', '👦', '👧', '👴', '👵', '🤵', '👸'].map(emoji => 
+                                        `<button onclick="changeAvatar('${emoji}')" style="padding: 8px; background: ${currentUser.avatar === emoji ? 'var(--primary-blue)' : 'var(--pure-white)'}; color: ${currentUser.avatar === emoji ? 'white' : 'var(--text-dark)'}; border: 1px solid var(--primary-blue); border-radius: 8px; cursor: pointer; font-size: 16px;">${emoji}</button>`
+                                    ).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="margin-bottom: 12px; color: var(--text-dark);">数据管理</h4>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <button onclick="exportData()" style="padding: 12px; background: var(--pure-white); color: var(--primary-blue); border: 1px solid var(--primary-blue); border-radius: 8px; cursor: pointer;">导出数据</button>
+                            <button onclick="clearData()" style="padding: 12px; background: var(--error-red); color: white; border: none; border-radius: 8px; cursor: pointer;">清除所有数据</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 style="margin-bottom: 12px; color: var(--text-dark);">关于</h4>
+                        <div style="padding: 16px; background: var(--soft-gray); border-radius: 12px; text-align: center;">
+                            <div style="font-size: 32px; margin-bottom: 8px;">🏠</div>
+                            <div style="font-weight: 600; color: var(--text-dark); margin-bottom: 4px;">温馨家庭打卡</div>
+                            <div style="font-size: 14px; color: var(--text-gray);">版本 2.0.0</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 修改头像
+        function changeAvatar(emoji) {
+            currentUser.avatar = emoji;
+            
+            // 更新用户数据
+            const userIndex = appData.users.findIndex(u => u.id === currentUser.id);
+            if (userIndex > -1) {
+                appData.users[userIndex].avatar = emoji;
+                saveData();
+                localStorage.setItem('familyCheckin_currentUser', JSON.stringify(currentUser));
+            }
+            
+            // 更新界面
+            updateUserProfile();
+            showSettings(); // 刷新设置页面
+        }
+
+        // 导出数据
+        function exportData() {
+            const data = {
+                users: appData.users,
+                tasks: appData.tasks,
+                checkins: appData.checkins,
+                relationships: appData.relationships,
+                exportTime: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `family-checkin-backup-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            alert('数据导出成功！');
+        }
+
+        // 清除数据
+        function clearData() {
+            if (!confirm('确定要清除所有数据吗？此操作不可恢复！')) {
+                return;
+            }
+            
+            if (!confirm('再次确认：这将删除所有用户、任务和打卡记录！')) {
+                return;
+            }
+            
+            localStorage.clear();
+            alert('数据已清除，页面将重新加载');
+            location.reload();
+        }
+
+        // 退出登录
+        function handleLogout() {
+            if (confirm('确定要退出登录吗？')) {
+                currentUser = null;
+                localStorage.removeItem('familyCheckin_currentUser');
+                showLoginScreen();
+            }
+            toggleFloatingMenu();
+        }
+
+        // 打卡功能
+        function checkinTask(taskId) {
+            const task = appData.tasks.find(t => t.id === taskId);
+            if (!task) {
+                alert('任务不存在');
+                return;
+            }
+
+            const today = new Date().toISOString().split('T')[0];
+            const now = new Date();
+            const currentTime = now.toTimeString().slice(0, 5);
+
+            // 检查是否已经打卡
+            const existingCheckin = appData.checkins.find(c => 
+                c.taskId === taskId && 
+                c.userId === currentUser.id && 
+                c.date === today
+            );
+
+            if (existingCheckin) {
+                alert('今日已打卡！');
+                return;
+            }
+
+            // 创建打卡记录
+            const checkin = {
+                id: Date.now().toString(),
+                taskId: taskId,
+                userId: currentUser.id,
+                date: today,
+                time: currentTime,
+                createdAt: Date.now()
+            };
+
+            appData.checkins.push(checkin);
+            saveData();
+
+            alert(`打卡成功！时间：${currentTime}`);
+            
+            // 刷新数据
+            loadDashboardData();
+        }
+
+        // 键盘事件监听
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && currentModal) {
+                closeModal();
+            }
+        });
+
+        console.log('🎉 温馨家庭打卡系统已加载完成');
+    </script>
+</body>
+</html>
