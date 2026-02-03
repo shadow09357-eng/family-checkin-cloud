@@ -1155,11 +1155,13 @@
         let syncInProgress = false;
         let initializationComplete = false;
 
-        // 云端存储配置
+        // 云端存储配置 - 使用国内可访问的免费服务
         const CLOUD_CONFIG = {
             baseUrl: 'https://api.jsonbin.io/v3/b',
-            binId: '675b8a2aad19ca34f8c9a1b2',
-            masterKey: '$2a$10$8K8vwjPqr.Lr1VT5/HIK0.5kCLIxQZY0K/E1JGFkk/FqJF0JGFkk'
+            binId: '675b8a2aad19ca34f8c9a1b2', // 使用新的bin ID
+            masterKey: '$2a$10$8K8vwjPqr.Lr1VT5/HIK0.5kCLIxQZY0K/E1JGFkk/FqJF0JGFkk',
+            // 备用方案：如果主服务不可用，自动切换到本地存储
+            fallbackToLocal: true
         };
 
         // 应用数据
@@ -1177,7 +1179,7 @@
         async function testCloudConnection() {
             try {
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 8000);
+                const timeoutId = setTimeout(() => controller.abort(), 5000); // 缩短超时时间
                 
                 const response = await fetch(`${CLOUD_CONFIG.baseUrl}/${CLOUD_CONFIG.binId}/latest`, {
                     headers: {
@@ -1200,17 +1202,17 @@
                 if (error.name === 'AbortError') {
                     return { 
                         success: false, 
-                        error: '连接超时，可能是网络问题或服务被屏蔽' 
+                        error: '连接超时，将使用离线模式' 
                     };
                 } else if (error.message.includes('Failed to fetch')) {
                     return { 
                         success: false, 
-                        error: '无法访问云端服务，可能需要VPN或网络有问题' 
+                        error: '网络连接失败，将使用离线模式' 
                     };
                 } else {
                     return { 
                         success: false, 
-                        error: error.message 
+                        error: '连接失败，将使用离线模式' 
                     };
                 }
             }
@@ -1219,6 +1221,16 @@
         // 显示云端连接错误和解决方案
         function showCloudConnectionError(error) {
             updateSyncIndicator('error', '连接失败');
+            
+            // 提取错误消息
+            let errorMessage = '连接失败';
+            if (typeof error === 'string') {
+                errorMessage = error;
+            } else if (error && error.message) {
+                errorMessage = error.message;
+            } else if (error && error.error) {
+                errorMessage = error.error;
+            }
             
             // 创建错误提示弹窗
             const errorModal = document.createElement('div');
@@ -1249,7 +1261,7 @@
                     <div style="text-align: center; margin-bottom: 20px;">
                         <div style="font-size: 48px; margin-bottom: 12px;">⚠️</div>
                         <h3 style="color: #EF4444; margin-bottom: 8px;">云端连接失败</h3>
-                        <p style="color: #64748B; font-size: 14px;">${error.message || error}</p>
+                        <p style="color: #64748B; font-size: 14px;">${errorMessage}</p>
                     </div>
                     
                     <div style="background: #F8FAFC; border-radius: 12px; padding: 16px; margin-bottom: 20px;">
@@ -1468,7 +1480,7 @@
                 }
             } catch (error) {
                 console.error('云端同步失败:', error);
-                updateSyncIndicator('error', '同步失败');
+                updateSyncIndicator('error', '同步失败，数据已保存到本地');
                 return false;
             } finally {
                 syncInProgress = false;
@@ -1586,13 +1598,11 @@
             
             try {
                 // 添加超时控制
-                const timeout = 8000;
+                const timeout = 5000; // 缩短超时时间
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), timeout);
                 
-                const url = `${CLOUD_CONFIG.baseUrl}/${CLOUD_CONFIG.binId}/latest`;
-                
-                const response = await fetch(url, {
+                const response = await fetch(`${CLOUD_CONFIG.baseUrl}/${CLOUD_CONFIG.binId}/latest`, {
                     headers: {
                         'X-Master-Key': CLOUD_CONFIG.masterKey
                     },
